@@ -1,9 +1,16 @@
+// For counter u have to import 'npm install react-native-stopwatch-timer'
+
 import { StyleSheet, Text, View, Button, TextInput, ScrollView } from 'react-native';
+import { TouchableHighlight } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import dayjs from 'dayjs';
+import {useState, useEffect} from "react";
 
-import { useState } from 'react';
+import { Stopwatch } from 'react-native-stopwatch-timer';
+
+import React from 'react';
 
 export function Spacer({height}){
   return(
@@ -18,11 +25,58 @@ const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
 export function HomeScreen(){
-  return(
-    <View style={styles.container}>
-      <Text>Home</Text>
-    </View>
-  )
+    // This is the clock
+    //
+    // const [date, setDate] = useState(dayjs())
+    //
+    // useEffect( () => {
+    //     const intervat = setInterval(() => {
+    //         setDate(dayjs())
+    //     }, 1000)
+    //
+    //     return () => clearInterval(intervat);
+    //     }, [])
+
+    const [isStopwatchStart, setIsStopwatchStart] = useState(false);
+    const [resetStopwatch, setResetStopwatch] = useState(false);
+
+    return(
+        <View style={styles.container}>
+            <View style={styles.counterContainer}>
+                <Stopwatch
+                    laps
+                    msecs
+                    start={isStopwatchStart}
+                    reset={resetStopwatch}
+                    options={options}
+                    getTime={(time) => {
+                        console.log(time);
+                    }}
+                />
+                <Spacer/>
+                <View style={styles.stopwatchButton}>
+                    <TouchableHighlight
+                        onPress={() => {
+                            setIsStopwatchStart(!isStopwatchStart);
+                            setResetStopwatch(false);
+                        }}
+                    >
+                        <Text style={styles.stopwatchButtonStyle}>
+                            {!isStopwatchStart ? 'START' : 'STOP'}
+                        </Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                        onPress={() => {
+                            setIsStopwatchStart(false);
+                            setResetStopwatch(true);
+                        }}
+                    >
+                        <Text style={styles.stopwatchButtonStyle}>RESET</Text>
+                    </TouchableHighlight>
+                </View>
+            </View>
+        </View>
+    )
 }
 
 export function Event({name,day,month,year}){
@@ -170,6 +224,20 @@ export default function App() {
     </NavigationContainer>
   );
 }
+//Option for Stopwatch
+const options = {
+    container: {
+        backgroundColor: 'green',
+        padding: 5,
+        borderRadius: 10,
+        width: '70%',
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 25,
+        color: 'pink',
+    },
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -178,6 +246,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+    counterContainer: {
+        height: '30%',
+        width: '90%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 5,
+        borderRadius: 25,
+    },
+
+    counterStyle: {
+      fontSize: 30,
+    },
+
+    stopwatchButtonStyle: {
+      fontSize: 16,
+    },
+
+    stopwatchButton: {
+        height: "30%",
+        width: "70%",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
 
   contentContainer:{
     alignItems:"center",
@@ -194,7 +286,7 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     height:100,
     backgroundColor:"white",
-    borderRadius:"10%",
+    borderRadius: 10,
     shadowColor: "gray",
     shadowOpacity: 0.8,
     shadowRadius: 2,
