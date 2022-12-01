@@ -26,12 +26,29 @@ export function HomeScreen(){
 }
 
 export function Event({name,day,month,year}){
+
+  let currDay = new Date().getDate();
+  let currMonth = new Date().getMonth()+1;
+  let currYear = new Date().getFullYear();
+
+  if(year < currYear){year=currYear;}
+
+  if(month < currMonth){year=currYear+1;}
+  else if((month==currMonth)&&(day<currDay)){year=currYear+1;}
+
+  let currDate = new Date()
+  let eventDate = new Date( month+"/"+day+"/"+year)
+
+  let difference = eventDate.getTime() - currDate.getTime();
+  let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+
+
   return (
     <View style={styles.event}>
       
       <View style={styles.eventDate}>
         <Text style={styles.eventText}>{day} / {month} / {year}</Text>
-        <Text>23 days left</Text>
+        <Text>{TotalDays} days left</Text>
       </View>
 
       <Text style={[styles.eventText,{fontSize:24}]}>{name}</Text>
