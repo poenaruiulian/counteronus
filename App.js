@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View, Button, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { CountUp } from 'use-count-up'
 
 import { useState } from 'react';
 
@@ -17,13 +19,202 @@ export function Spacer({height}){
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
-export function HomeScreen(){
+
+
+//Home/Counter screen
+export function HomeScreen({navigation}){
+
+  const [minutes, setMinutes] = useState(0)
+  const [hours, setHours] = useState(0)
+  const [days, setDays] = useState(0)
+
+  const onComplete = () => {
+    setMinutes(minutes+1)
+    if(minutes==59){
+      setMinutes(0);
+      setHours(hours+1);
+    }
+    if(hours==23){
+      setHours(0)
+      setDays(days+1)
+    }
+    return { shouldRepeat: true }
+  }
+
   return(
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text style={styles.invisible}>
+        <CountUp isCounting end={60} duration={60} onComplete={onComplete} />
+      </Text>
+      <View style={styles.counter}>
+        <View style={styles.counterItem}>
+          <Text style={{fontSize:32}}>{days}</Text> 
+          <Spacer height={10}/>        
+          <Text style={{fontWeight:"bold"}}>DAYS</Text>
+        </View>
+        <View style={styles.counterItem}>
+          <Text style={{fontSize:32}}>{hours}</Text>    
+          <Spacer height={10}/>     
+          <Text style={{fontWeight:"bold"}}>HOURS</Text>
+        </View>
+        <View style={styles.counterItem}>
+          <Text style={{fontSize:32}}>{minutes}</Text>    
+          <Spacer height={10}/>     
+          <Text style={{fontWeight:"bold"}}>MINUTES</Text>
+        </View>
+      </View>
+      <Spacer height={100}/>
+      <TouchableOpacity 
+        title="Edit" 
+        onPress={
+          ()=>
+          {
+            navigation.navigate("Edit",{
+              setDays:setDays,
+              setMinutes:setMinutes,
+              setHours:setHours
+            })
+
+        }
+      }>
+        <Image style={{height:40, width:40}}source={require("./images/icons/edit.png")}/>
+      </TouchableOpacity>
     </View>
   )
 }
+
+export function EditDate({navigation,route}){
+
+  const [date,setDate] = useState({
+    day:0,
+    month:0,
+    year:0,
+    hours:0,
+    minutes:0
+  })
+
+  return(
+    <View style={styles.container}>
+      <Text style={{fontSize:32,fontWeight:"bold"}}>Edit the date</Text>
+      <Spacer height={20}/>
+      <TextInput 
+            style={styles.textInputEvents}
+            placeholder="Event day"
+            onChangeText={(newText)=>setDate(
+              {
+                day:Number(newText),
+                month:date.month,
+                year:date.year,
+                hours:date.hours,
+                minutes:date.minutes
+              }
+            )}
+          />
+      <Spacer height={10}/>
+      <TextInput 
+            style={styles.textInputEvents}
+            placeholder="Event month"
+            onChangeText={(newText)=>setDate(
+              {
+                day:date.day,
+                month:Number(newText),
+                year:date.year,
+                hours:date.hours,
+                minutes:date.minutes
+              }
+            )}
+          />
+      <Spacer height={10}/>
+      <TextInput 
+            style={styles.textInputEvents}
+            placeholder="Event year"
+            onChangeText={(newText)=>setDate(
+              {
+                day:date.day,
+                month:date.month,
+                year:Number(newText),
+                hours:date.hours,
+                minutes:date.minutes
+              }
+            )}
+          />
+      <Spacer height={10}/>
+      <TextInput 
+            style={styles.textInputEvents}
+            placeholder="Event hour"
+            onChangeText={(newText)=>setDate(
+              {
+                day:date.day,
+                month:date.month,
+                year:date.year,
+                hours:Number(newText),
+                minutes:date.minutes
+              }
+            )}
+      />
+      <Spacer height={10}/>
+      <TextInput 
+            style={styles.textInputEvents}
+            placeholder="Event minute"
+            onChangeText={(newText)=>setDate(
+              {
+                day:date.day,
+                month:date.month,
+                year:date.year,
+                hours:date.hours,
+                minutes:Number(newText)
+              }
+            )}
+      />
+      <Button title="Done" onPress={
+            ()=>{
+
+              if(date.day!=0 && date.month!=0 && date.year!=0){
+                let eventDate = new Date( date.month+"/"+date.day+"/"+date.year)
+                let currDate = new Date()
+  
+                let difference = currDate.getTime() - eventDate.getTime();
+                let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+
+                let currHours = new Date().getHours();
+                let currMinutes = new Date().getMinutes();
+                
+                if(currHours>date.hours){
+                  let startDate = new Date(0,0,0,date.hours,date.minutes)
+                  let endDate = new Date(0,0,0,currHours,currMinutes)
+                
+                  let millis = endDate - startDate
+                  let minutes = millis/1000/60
+
+                  currHours = parseInt(minutes/60)
+                  currMinutes = minutes - currHours*60
+                }else{
+                  TotalDays--
+                }
+
+                route.params.setDays(TotalDays)
+                route.params.setHours(currHours)
+                route.params.setMinutes(currMinutes)
+  
+                navigation.navigate("Home")
+              }else{alert("Complete the date!")}
+            }}/>
+    </View>
+  )
+}
+
+export function HomeNavigation(){
+
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen}/>
+      <Stack.Screen name="Edit" component={EditDate}/>
+    </Stack.Navigator>
+
+  )
+}
+
+//Events screen
 
 export function Event({name,day,month,year}){
 
@@ -60,6 +251,7 @@ export function EventsScreen({navigation}){
 
   const [events, setEvents] = useState([])
 
+  
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll} contentContainerStyle={styles.contentContainer}>
@@ -72,8 +264,7 @@ export function EventsScreen({navigation}){
           })
         }}/>   
         
-        {/* Next two lines are for test */}
-        <Event name={"First kiss"} day={12} month={12} year={2018}/>
+        
         <Spacer height={10}/>
         {events.map((e)=>{
           return (
@@ -177,17 +368,23 @@ export function EventsNavigation(){
   )
 }
 
+
+//App
 export default function App() {
+
+
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name={"Home"} component={HomeScreen} options={{headerShown: false}}/>
-        <Tab.Screen name={"Events"} component={EventsNavigation} options={{headerShown: false}}/>
+        <Tab.Screen name={"Home"} component={HomeNavigation} options={{headerShown: false}}/>
+        <Tab.Screen name={"Events"} component={EventsNavigation} options={{headerShown: false}} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
 
+
+//Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -238,5 +435,20 @@ const styles = StyleSheet.create({
     borderLeftWidth:0,
     borderColor:'black',
 
+  },
+
+  invisible:{
+    display:"none"
+  },
+
+  counter:{
+    width:"100%",
+    flexDirection:"row",
+    justifyContent:"space-evenly"
+  },
+
+  counterItem:{
+    flexDirection:"column",
+    alignItems:"center"
   },
 });
