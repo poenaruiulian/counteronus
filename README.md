@@ -31,4 +31,4 @@ Because dating is easy, but remembering is hard we brought you CounterOnUs.
 <div>
  
 ---
-*This is a beta version, more thing coming soon* 😘
+*This is a beta version, more things coming soon* 😘
