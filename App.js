@@ -1,7 +1,10 @@
-import { StyleSheet, Text, View, Button, TextInput, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, TouchableOpacity, Image, ImageBackground } from 'react-native';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { AntDesign } from '@expo/vector-icons'; 
 
 import { CountUp } from 'use-count-up'
 
@@ -42,25 +45,25 @@ export function HomeScreen({navigation}){
   }
 
   return(
-    <View style={styles.container}>
+    <ImageBackground source={require("./images/background/bg1.jpeg")} style={styles.container}>
       <Text style={styles.invisible}>
         <CountUp isCounting end={60} duration={60} onComplete={onComplete} />
       </Text>
       <View style={styles.counter}>
         <View style={styles.counterItem}>
-          <Text style={{fontSize:32}}>{days}</Text> 
+          <Text style={{fontSize:32,color:"white"}}>{days}</Text> 
           <Spacer height={10}/>        
-          <Text style={{fontWeight:"bold"}}>DAYS</Text>
+          <Text style={{fontWeight:"bold",color:"white"}}>DAYS</Text>
         </View>
         <View style={styles.counterItem}>
-          <Text style={{fontSize:32}}>{hours}</Text>    
+          <Text style={{fontSize:32,color:"white"}}>{hours}</Text>    
           <Spacer height={10}/>     
-          <Text style={{fontWeight:"bold"}}>HOURS</Text>
+          <Text style={{fontWeight:"bold",color:"white"}}>HOURS</Text>
         </View>
         <View style={styles.counterItem}>
-          <Text style={{fontSize:32}}>{minutes}</Text>    
+          <Text style={{fontSize:32,color:"white"}}>{minutes}</Text>    
           <Spacer height={10}/>     
-          <Text style={{fontWeight:"bold"}}>MINUTES</Text>
+          <Text style={{fontWeight:"bold",color:"white"}}>MINUTES</Text>
         </View>
       </View>
       <Spacer height={100}/>
@@ -79,7 +82,7 @@ export function HomeScreen({navigation}){
       }>
         <Image style={{height:40, width:40}}source={require("./images/icons/edit.png")}/>
       </TouchableOpacity>
-    </View>
+    </ImageBackground>
   )
 }
 
@@ -94,12 +97,13 @@ export function EditDate({navigation,route}){
   })
 
   return(
-    <View style={styles.container}>
-      <Text style={{fontSize:32,fontWeight:"bold"}}>Edit the date</Text>
+    <ImageBackground source={require("./images/background/bg1.jpeg")} style={styles.container}>
+      <Text style={{fontSize:32,fontWeight:"bold",color:"#c092e8"}}>Edit the date</Text>
       <Spacer height={20}/>
       <TextInput 
             style={styles.textInputEvents}
             placeholder="Event day"
+            placeholderTextColor={'#e4cdfa'}
             onChangeText={(newText)=>setDate(
               {
                 day:Number(newText),
@@ -114,6 +118,7 @@ export function EditDate({navigation,route}){
       <TextInput 
             style={styles.textInputEvents}
             placeholder="Event month"
+            placeholderTextColor={'#e4cdfa'}
             onChangeText={(newText)=>setDate(
               {
                 day:date.day,
@@ -128,6 +133,7 @@ export function EditDate({navigation,route}){
       <TextInput 
             style={styles.textInputEvents}
             placeholder="Event year"
+            placeholderTextColor={'#e4cdfa'}
             onChangeText={(newText)=>setDate(
               {
                 day:date.day,
@@ -142,6 +148,7 @@ export function EditDate({navigation,route}){
       <TextInput 
             style={styles.textInputEvents}
             placeholder="Event hour"
+            placeholderTextColor={'#e4cdfa'}
             onChangeText={(newText)=>setDate(
               {
                 day:date.day,
@@ -156,6 +163,7 @@ export function EditDate({navigation,route}){
       <TextInput 
             style={styles.textInputEvents}
             placeholder="Event minute"
+            placeholderTextColor={'#e4cdfa'}
             onChangeText={(newText)=>setDate(
               {
                 day:date.day,
@@ -166,7 +174,8 @@ export function EditDate({navigation,route}){
               }
             )}
       />
-      <Button title="Done" onPress={
+      <Spacer height={30}/>
+      <TouchableOpacity title="Done" onPress={
             ()=>{
 
               if(date.day!=0 && date.month!=0 && date.year!=0){
@@ -198,8 +207,10 @@ export function EditDate({navigation,route}){
   
                 navigation.navigate("Home")
               }else{alert("Complete the date!")}
-            }}/>
-    </View>
+            }}>
+              <Image style={{height:70,width:70}} source={require("./images/icons/checklist.png")}/>
+          </TouchableOpacity>
+    </ImageBackground>
   )
 }
 
@@ -207,8 +218,8 @@ export function HomeNavigation(){
 
   return(
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen}/>
-      <Stack.Screen name="Edit" component={EditDate}/>
+      <Stack.Screen name="Home" component={HomeScreen}  options={{headerShown: false}}/>
+      <Stack.Screen name="Edit" component={EditDate}  options={{headerShown: false}}/>
     </Stack.Navigator>
 
   )
@@ -253,18 +264,21 @@ export function EventsScreen({navigation}){
 
   
   return (
-    <View style={styles.container}>
+    <ImageBackground source={require("./images/background/bg1.jpeg")} style={styles.container}>
       <ScrollView style={styles.scroll} contentContainerStyle={styles.contentContainer}>
-
-        <Button style={styles.addEventBtn} title="Add event" onPress={
+      <Spacer height={20}/>
+        <TouchableOpacity style={styles.addEventBtn} title="Add event" onPress={
           ()=>{
           navigation.push("Add event",{
             events:events,
             setEvents:setEvents
           })
-        }}/>   
-        
-        
+        }}>
+          <Image style={{height:40,width:40}} source={require("./images/icons/add-event.png")}/>
+        </TouchableOpacity>     
+        <Spacer height={20}/>
+
+        <Event name={"Aniversary"} day={18} month={11} year={2017}/>
         <Spacer height={10}/>
         {events.map((e)=>{
           return (
@@ -276,7 +290,7 @@ export function EventsScreen({navigation}){
         })}
 
       </ScrollView>
-    </View>
+    </ImageBackground>
   )
 }
 
@@ -291,12 +305,13 @@ export function AddEventScreen({navigation,route}){
   })
 
   return (
-    <View style={styles.container}>
-      <Text style={{fontSize:32,fontWeight:"bold"}}>Add event</Text>
+    <ImageBackground source={require("./images/background/bg1.jpeg")} style={styles.container}>
+      <Text style={{fontSize:32,fontWeight:"bold",color:"#c092e8"}}>Add event</Text>
       <Spacer height={20}/>
       <TextInput 
             style={styles.textInputEvents}
             placeholder="Event name"
+            placeholderTextColor={'#e4cdfa'}
             onChangeText={(newText)=>setNewEvents(
               {
                 name:newText,
@@ -310,6 +325,7 @@ export function AddEventScreen({navigation,route}){
       <TextInput 
             style={styles.textInputEvents}
             placeholder="Event day"
+            placeholderTextColor={'#e4cdfa'}
             onChangeText={(newText)=>setNewEvents(
               {
                 name:newEvent.name,
@@ -323,6 +339,7 @@ export function AddEventScreen({navigation,route}){
       <TextInput 
             style={styles.textInputEvents}
             placeholder="Event month"
+            placeholderTextColor={'#e4cdfa'}
             onChangeText={(newText)=>setNewEvents(
               {
                 name:newEvent.name,
@@ -336,6 +353,7 @@ export function AddEventScreen({navigation,route}){
       <TextInput 
             style={styles.textInputEvents}
             placeholder="Event year"
+            placeholderTextColor={'#e4cdfa'}
             onChangeText={(newText)=>setNewEvents(
               {
                 name:newEvent.name,
@@ -346,14 +364,16 @@ export function AddEventScreen({navigation,route}){
             )}
           />
       <Spacer height={10}/>
-      <Button title="Done" onPress={
+      <TouchableOpacity title="Done" onPress={
             ()=>{
               if((newEvent.day != 0 )&&(newEvent.month != 0 )&&(newEvent.year != 0 )&&(newEvent.name != "")){
                 route.params.setEvents([...route.params.events,newEvent])
                 navigation.navigate("Events")
               }else{alert("Add an event please!")}
-            }}/>
-    </View>
+            }}>
+            <Image style={{height:70,width:70}} source={require("./images/icons/checklist.png")}/>
+      </TouchableOpacity>
+    </ImageBackground>
   )
 
 }
@@ -375,9 +395,27 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name={"Home"} component={HomeNavigation} options={{headerShown: false}}/>
-        <Tab.Screen name={"Events"} component={EventsNavigation} options={{headerShown: false}} />
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle:{backgroundColor:"pink"},
+          tabBarBackground:()=>(
+            <Image source={require("./images/background/love1.jpg")}/>
+          ),
+          tabBarActiveTintColor:'#c848d4'
+        }}
+      >
+        <Tab.Screen name={"Home"} component={HomeNavigation} 
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) =>
+          <AntDesign name={focused ? 'heart' : 'hearto'} size={size} color={color}/>  ,
+          }}/>
+        <Tab.Screen name={"Events"} component={EventsNavigation} 
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) =>
+            <AntDesign name={focused ? 'heart' : 'hearto'} size={size} color={color}/>  
+          }} />
       </Tab.Navigator>
     </NavigationContainer>
   );
@@ -407,7 +445,7 @@ const styles = StyleSheet.create({
     alignItems:"center",
     flexDirection:"row",
     height:100,
-    backgroundColor:"white",
+    backgroundColor:"#c092e8",
     borderRadius:"10%",
     shadowColor: "gray",
     shadowOpacity: 0.8,
@@ -433,8 +471,8 @@ const styles = StyleSheet.create({
     width:"50%",
     borderWidth:2,
     borderLeftWidth:0,
-    borderColor:'black',
-
+    borderColor:'#e4cdfa',
+    color:"#e4cdfa"
   },
 
   invisible:{
@@ -449,6 +487,10 @@ const styles = StyleSheet.create({
 
   counterItem:{
     flexDirection:"column",
-    alignItems:"center"
+    alignItems:"center",
+    borderWidth:2,
+    borderRadius:10,
+    padding:10,
+    borderColor:"white"
   },
 });
