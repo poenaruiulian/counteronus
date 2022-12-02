@@ -16,7 +16,6 @@ But for the long lovers, we have the edit screen:
 
 <div style="flex-direction:row">
   <img src="./readmeImages/editDate2.jpeg" width="288" height="512">
-  <br>
   <img src="./readmeImages/home2.jpeg" width="288" height="512">
 <div>
   
@@ -26,6 +25,5 @@ A place with all the bright moments:
 
 <div style="flex-direction:row">
   <img src="./readmeImages/events.jpeg" width="288" height="512">
-  <br>
   <img src="./readmeImages/addEvent.jpeg" width="288" height="512">
 <div>
