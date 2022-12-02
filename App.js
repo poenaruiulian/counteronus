@@ -98,118 +98,144 @@ export function EditDate({navigation,route}){
 
   return(
     <ImageBackground source={require("./images/background/bg1.jpeg")} style={styles.container}>
-      <Text style={{fontSize:32,fontWeight:"bold",color:"#c092e8"}}>Edit the date</Text>
-      <Spacer height={20}/>
-      <TextInput 
-            style={styles.textInputEvents}
-            placeholder="Event day"
-            placeholderTextColor={'#e4cdfa'}
-            onChangeText={(newText)=>setDate(
-              {
-                day:Number(newText),
-                month:date.month,
-                year:date.year,
-                hours:date.hours,
-                minutes:date.minutes
-              }
-            )}
-          />
-      <Spacer height={10}/>
-      <TextInput 
-            style={styles.textInputEvents}
-            placeholder="Event month"
-            placeholderTextColor={'#e4cdfa'}
-            onChangeText={(newText)=>setDate(
-              {
-                day:date.day,
-                month:Number(newText),
-                year:date.year,
-                hours:date.hours,
-                minutes:date.minutes
-              }
-            )}
-          />
-      <Spacer height={10}/>
-      <TextInput 
-            style={styles.textInputEvents}
-            placeholder="Event year"
-            placeholderTextColor={'#e4cdfa'}
-            onChangeText={(newText)=>setDate(
-              {
-                day:date.day,
-                month:date.month,
-                year:Number(newText),
-                hours:date.hours,
-                minutes:date.minutes
-              }
-            )}
-          />
-      <Spacer height={10}/>
-      <TextInput 
-            style={styles.textInputEvents}
-            placeholder="Event hour"
-            placeholderTextColor={'#e4cdfa'}
-            onChangeText={(newText)=>setDate(
-              {
-                day:date.day,
-                month:date.month,
-                year:date.year,
-                hours:Number(newText),
-                minutes:date.minutes
-              }
-            )}
-      />
-      <Spacer height={10}/>
-      <TextInput 
-            style={styles.textInputEvents}
-            placeholder="Event minute"
-            placeholderTextColor={'#e4cdfa'}
-            onChangeText={(newText)=>setDate(
-              {
-                day:date.day,
-                month:date.month,
-                year:date.year,
-                hours:date.hours,
-                minutes:Number(newText)
-              }
-            )}
-      />
       <Spacer height={30}/>
-      <TouchableOpacity title="Done" onPress={
-            ()=>{
-
-              if(date.day!=0 && date.month!=0 && date.year!=0){
-                let eventDate = new Date( date.month+"/"+date.day+"/"+date.year)
-                let currDate = new Date()
-  
-                let difference = currDate.getTime() - eventDate.getTime();
-                let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
-
-                let currHours = new Date().getHours();
-                let currMinutes = new Date().getMinutes();
-                
-                if(currHours>date.hours){
-                  let startDate = new Date(0,0,0,date.hours,date.minutes)
-                  let endDate = new Date(0,0,0,currHours,currMinutes)
-                
-                  let millis = endDate - startDate
-                  let minutes = millis/1000/60
-
-                  currHours = parseInt(minutes/60)
-                  currMinutes = minutes - currHours*60
-                }else{
-                  TotalDays--
+      <ScrollView  style={styles.scroll} contentContainerStyle={styles.contentContainer}>
+        <Text style={{fontSize:32,fontWeight:"bold",color:"#c092e8"}}>Edit the date</Text>
+        <Spacer height={20}/>
+        <TextInput 
+              style={styles.textInputEvents}
+              placeholder="Event day"
+              placeholderTextColor={'#e4cdfa'}
+              keyboardType="number-pad"
+              onChangeText={(newText)=>setDate(
+                {
+                  day:Number(newText),
+                  month:date.month,
+                  year:date.year,
+                  hours:date.hours,
+                  minutes:date.minutes
                 }
+              )}
+            />
+        <Spacer height={10}/>
+        <TextInput 
+              style={styles.textInputEvents}
+              placeholder="Event month"
+              placeholderTextColor={'#e4cdfa'}
+              keyboardType="number-pad"
+              onChangeText={(newText)=>setDate(
+                {
+                  day:date.day,
+                  month:Number(newText),
+                  year:date.year,
+                  hours:date.hours,
+                  minutes:date.minutes
+                }
+              )}
+            />
+        <Spacer height={10}/>
+        <TextInput 
+              style={styles.textInputEvents}
+              placeholder="Event year"
+              placeholderTextColor={'#e4cdfa'}
+              keyboardType="number-pad"
+              onChangeText={(newText)=>setDate(
+                {
+                  day:date.day,
+                  month:date.month,
+                  year:Number(newText),
+                  hours:date.hours,
+                  minutes:date.minutes
+                }
+              )}
+            />
+        <Spacer height={10}/>
+        <TextInput 
+              style={styles.textInputEvents}
+              placeholder="Event hour"
+              placeholderTextColor={'#e4cdfa'}
+              keyboardType="number-pad"
+              onChangeText={(newText)=>setDate(
+                {
+                  day:date.day,
+                  month:date.month,
+                  year:date.year,
+                  hours:Number(newText),
+                  minutes:date.minutes
+                }
+              )}
+        />
+        <Spacer height={10}/>
+        <TextInput 
+              style={styles.textInputEvents}
+              placeholder="Event minute"
+              placeholderTextColor={'#e4cdfa'}
+              keyboardType="number-pad"
+              onChangeText={(newText)=>setDate(
+                {
+                  day:date.day,
+                  month:date.month,
+                  year:date.year,
+                  hours:date.hours,
+                  minutes:Number(newText)
+                }
+              )}
+        />
+        <Spacer height={30}/>
+        <TouchableOpacity title="Done" onPress={
+              ()=>{
 
-                route.params.setDays(TotalDays)
-                route.params.setHours(currHours)
-                route.params.setMinutes(currMinutes)
-  
-                navigation.navigate("Home")
-              }else{alert("Complete the date!")}
-            }}>
-              <Image style={{height:70,width:70}} source={require("./images/icons/checklist.png")}/>
-          </TouchableOpacity>
+                if(date.day<1||date.day>31){alert("Something off with the day:"+date.day)}
+                else if(date.month<1||date.month>12){alert("Something off with the month:"+date.month)}
+                else if(date.year > new Date().getFullYear() || date.year<1){alert("Something off with the year:"+date.year)}
+                else if(date.month == 4 && date.day == 31){alert("April has 30 days and you entered 31")}
+                else if (date.month == 2){
+                  let bisect = false
+                  if(((date.year%4==0)&&(date.year%100!=0)) || (date.year%400==0)){bisect=true}
+                  if(bisect && date.year>29){alert("The year is a leap year so February can't have more than 29 days")}
+                  else{!bisect && date.year>28}{alert("The year is NOT a leap year so February can't have more than 28 days")}
+                }
+                else if(date.month == 6 && date.day == 31){alert("June has 30 days and you entered 31")}
+                else if(date.month == 9 && date.day == 31){alert("September has 30 days and you entered 31")}
+                else if(date.month == 11 && date.day == 31){alert("November has 30 days and you entered 31")}
+                else if(date.hours<0 || date.hours>23){
+                  if(date.hours==24){alert("Did you mean 00?")}
+                  alert("Something off with the hour:"+date.hours)
+                }
+                else if(date.minutes<0||date.minutes>59){alert("Something off with the minute:"+date.minutes)}
+                else if(date.day!=0 && date.month!=0 && date.year!=0){
+                  let eventDate = new Date( date.month+"/"+date.day+"/"+date.year)
+                  let currDate = new Date()
+    
+                  let difference = currDate.getTime() - eventDate.getTime();
+                  let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+
+                  let currHours = new Date().getHours();
+                  let currMinutes = new Date().getMinutes();
+                  
+                  if(currHours>date.hours){
+                    let startDate = new Date(0,0,0,date.hours,date.minutes)
+                    let endDate = new Date(0,0,0,currHours,currMinutes)
+                  
+                    let millis = endDate - startDate
+                    let minutes = millis/1000/60
+
+                    currHours = parseInt(minutes/60)
+                    currMinutes = minutes - currHours*60
+                  }else{
+                    TotalDays--
+                  }
+
+                  route.params.setDays(TotalDays)
+                  route.params.setHours(currHours)
+                  route.params.setMinutes(currMinutes)
+    
+                  navigation.navigate("Home")
+                }else{alert("Complete the date!")}
+              }}>
+                <Image style={{height:70,width:70}} source={require("./images/icons/checklist.png")}/>
+            </TouchableOpacity>
+      </ScrollView>
     </ImageBackground>
   )
 }
@@ -306,6 +332,8 @@ export function AddEventScreen({navigation,route}){
 
   return (
     <ImageBackground source={require("./images/background/bg1.jpeg")} style={styles.container}>
+      <Spacer height={30}/>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.contentContainer}>
       <Text style={{fontSize:32,fontWeight:"bold",color:"#c092e8"}}>Add event</Text>
       <Spacer height={20}/>
       <TextInput 
@@ -326,6 +354,7 @@ export function AddEventScreen({navigation,route}){
             style={styles.textInputEvents}
             placeholder="Event day"
             placeholderTextColor={'#e4cdfa'}
+            keyboardType="number-pad"
             onChangeText={(newText)=>setNewEvents(
               {
                 name:newEvent.name,
@@ -340,6 +369,7 @@ export function AddEventScreen({navigation,route}){
             style={styles.textInputEvents}
             placeholder="Event month"
             placeholderTextColor={'#e4cdfa'}
+            keyboardType="number-pad"
             onChangeText={(newText)=>setNewEvents(
               {
                 name:newEvent.name,
@@ -354,6 +384,7 @@ export function AddEventScreen({navigation,route}){
             style={styles.textInputEvents}
             placeholder="Event year"
             placeholderTextColor={'#e4cdfa'}
+            keyboardType="number-pad"
             onChangeText={(newText)=>setNewEvents(
               {
                 name:newEvent.name,
@@ -366,13 +397,27 @@ export function AddEventScreen({navigation,route}){
       <Spacer height={10}/>
       <TouchableOpacity title="Done" onPress={
             ()=>{
-              if((newEvent.day != 0 )&&(newEvent.month != 0 )&&(newEvent.year != 0 )&&(newEvent.name != "")){
+              if(newEvent.day<1||newEvent.day>31){alert("Something off with the day:"+newEvent.day)}
+              else if(newEvent.month<1||newEvent.month>12){alert("Something off with the month:"+newEvent.month)}
+              else if(newEvent.year > new Date().getFullYear() || newEvent.year<1){alert("Something off with the year:"+newEvent.year)}
+              else if(newEvent.month == 4 && newEvent.day == 31){alert("April has 30 days and you entered 31")}
+              else if (newEvent.month == 2){
+                let bisect = false
+                if(((newEvent.year%4==0)&&(newEvent.year%100!=0)) || (newEvent.year%400==0)){bisect=true}
+                if(bisect && newEvent.year>29){alert("The year is a leap year so February can't have more than 29 days")}
+                else{!bisect && newEvent.year>28}{alert("The year is NOT a leap year so February can't have more than 28 days")}
+              }
+              else if(newEvent.month == 6 && newEvent.day == 31){alert("June has 30 days and you entered 31")}
+              else if(newEvent.month == 9 && newEvent.day == 31){alert("September has 30 days and you entered 31")}
+              else if(newEvent.month == 11 && newEvent.day == 31){alert("November has 30 days and you entered 31")}
+              else if((newEvent.day != 0 )&&(newEvent.month != 0 )&&(newEvent.year != 0 )&&(newEvent.name != "")){
                 route.params.setEvents([...route.params.events,newEvent])
                 navigation.navigate("Events")
               }else{alert("Add an event please!")}
             }}>
             <Image style={{height:70,width:70}} source={require("./images/icons/checklist.png")}/>
       </TouchableOpacity>
+      </ScrollView>
     </ImageBackground>
   )
 
