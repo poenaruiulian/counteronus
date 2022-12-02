@@ -19,6 +19,8 @@ But for the long lovers, we have the edit screen:
   <img src="./readmeImages/home2.jpeg" width="288" height="512">
 <div>
   
+---
+  
 ### Events screen
   
 A place with all the bright moments:
@@ -27,3 +29,6 @@ A place with all the bright moments:
   <img src="./readmeImages/events.jpeg" width="288" height="512">
   <img src="./readmeImages/addEvent.jpeg" width="288" height="512">
 <div>
+ 
+---
+*This is a beta version, more thing coming soon* <3
