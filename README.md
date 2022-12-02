@@ -14,6 +14,6 @@ For the new lovers the counter starts at 0 0 0:
 
 But for the long lovers, we have the edit screen:
 
-<img src="./readmeImages/editDate2.jpeg" width="288" height="512">
-<img src="./readmeImages/home2.jpeg" width="288" height="512">
+<img src="./readmeImages/editDate2.jpeg" width="250" height="512">
+<img src="./readmeImages/home2.jpeg" width="250" height="512">
 
