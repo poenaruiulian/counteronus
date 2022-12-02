@@ -304,8 +304,7 @@ export function EventsScreen({navigation}){
         </TouchableOpacity>     
         <Spacer height={20}/>
 
-        <Event name={"Aniversary"} day={18} month={11} year={2017}/>
-        <Spacer height={10}/>
+
         {events.map((e)=>{
           return (
           <View>
